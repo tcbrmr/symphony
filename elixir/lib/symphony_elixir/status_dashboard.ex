@@ -440,7 +440,7 @@ defmodule SymphonyElixir.StatusDashboard do
     port = bound_port || configured_port
 
     if is_integer(port) and port > 0 do
-      "http://#{dashboard_url_host(host)}:#{port}/"
+      "http://#{dashboard_url_host(host)}:#{port}/dashboard"
     else
       nil
     end

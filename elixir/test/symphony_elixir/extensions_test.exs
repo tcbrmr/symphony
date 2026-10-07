@@ -428,6 +428,21 @@ defmodule SymphonyElixir.ExtensionsTest do
              }
   end
 
+  test "root page renders hello world with caller IP popup" do
+    start_test_endpoint(orchestrator: Module.concat(__MODULE__, :HelloPageOrchestrator), snapshot_timeout_ms: 5)
+
+    conn =
+      build_conn()
+      |> Map.put(:remote_ip, {203, 0, 113, 42})
+      |> get("/")
+
+    html = html_response(conn, 200)
+
+    assert html =~ "Hallo World"
+    assert html =~ ~s|window.alert("hallo 203.0.113.42")|
+    refute html =~ "Operations Dashboard"
+  end
+
   test "dashboard bootstraps liveview from embedded static assets" do
     orchestrator_name = Module.concat(__MODULE__, :AssetOrchestrator)
 
@@ -445,7 +460,7 @@ defmodule SymphonyElixir.ExtensionsTest do
 
     start_test_endpoint(orchestrator: orchestrator_name, snapshot_timeout_ms: 50)
 
-    html = html_response(get(build_conn(), "/"), 200)
+    html = html_response(get(build_conn(), "/dashboard"), 200)
     assert html =~ ~r|/dashboard\.css\?v=[0-9a-f]{12}|
 
     assert html =~
@@ -498,7 +513,7 @@ defmodule SymphonyElixir.ExtensionsTest do
 
     start_test_endpoint(orchestrator: orchestrator_name, snapshot_timeout_ms: 50)
 
-    {:ok, view, html} = live(build_conn(), "/")
+    {:ok, view, html} = live(build_conn(), "/dashboard")
     assert html =~ "Operations Dashboard"
     assert html =~ "MT-HTTP"
     assert html =~ "MT-RETRY"
@@ -571,7 +586,7 @@ defmodule SymphonyElixir.ExtensionsTest do
       snapshot_timeout_ms: 5
     )
 
-    {:ok, _view, html} = live(build_conn(), "/")
+    {:ok, _view, html} = live(build_conn(), "/dashboard")
     assert html =~ "Snapshot unavailable"
     assert html =~ "snapshot_unavailable"
   end
@@ -619,6 +634,11 @@ defmodule SymphonyElixir.ExtensionsTest do
     phoenix_js = Req.get!("http://127.0.0.1:#{port}/vendor/phoenix/phoenix.js")
     assert phoenix_js.status == 200
     assert phoenix_js.body =~ "var Phoenix = (() => {"
+
+    hello_page = Req.get!("http://127.0.0.1:#{port}/")
+    assert hello_page.status == 200
+    assert hello_page.body =~ "Hallo World"
+    assert hello_page.body =~ "hallo 127.0.0.1"
 
     refresh_response =
       Req.post!("http://127.0.0.1:#{port}/api/v1/refresh",

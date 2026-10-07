@@ -203,8 +203,9 @@ codex:
 - If `WORKFLOW.md` is missing or has invalid YAML at startup, Symphony does not boot.
 - If a later reload fails, Symphony keeps running with the last known good workflow and logs the
   reload error until the file is fixed.
-- `server.port` or CLI `--port` enables the optional Phoenix LiveView dashboard and JSON API at
-  `/`, `/api/v1/state`, `/api/v1/<issue_identifier>`, and `/api/v1/refresh`.
+- `server.port` or CLI `--port` enables the root hello page, optional Phoenix LiveView dashboard,
+  and JSON API at `/`, `/dashboard`, `/api/v1/state`, `/api/v1/<issue_identifier>`, and
+  `/api/v1/refresh`.
 
 ### Linear adapter profile
 
@@ -297,7 +298,8 @@ codex:
 
 The observability UI now runs on a minimal Phoenix stack:
 
-- LiveView for the dashboard at `/`
+- Minimal hello page at `/`
+- LiveView for the dashboard at `/dashboard`
 - JSON API for operational debugging under `/api/v1/*`
 - Bandit as the HTTP server
 - Phoenix dependency static assets for the LiveView client bootstrap

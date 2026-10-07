@@ -1223,15 +1223,15 @@ defmodule SymphonyElixir.OrchestratorStatusTest do
     assert rendered =~ "│ Project:"
     assert rendered =~ "https://linear.app/project/project/issues"
     assert rendered =~ "│ Dashboard:"
-    assert rendered =~ "http://127.0.0.1:4000/"
+    assert rendered =~ "http://127.0.0.1:4000/dashboard"
   end
 
   test "status dashboard prefers the bound server port and normalizes wildcard hosts" do
     assert StatusDashboard.dashboard_url_for_test("0.0.0.0", 0, 43_123) ==
-             "http://127.0.0.1:43123/"
+             "http://127.0.0.1:43123/dashboard"
 
     assert StatusDashboard.dashboard_url_for_test("::1", 4000, nil) ==
-             "http://[::1]:4000/"
+             "http://[::1]:4000/dashboard"
   end
 
   test "status dashboard renders next refresh countdown and checking marker" do

@@ -1485,9 +1485,9 @@ Enablement (extension):
 - Changes to HTTP listener settings (for example `server.port`) do not need to hot-rebind;
   restart-required behavior is conformant.
 
-#### 13.7.1 Human-Readable Dashboard (`/`)
+#### 13.7.1 Human-Readable Dashboard (`/dashboard`)
 
-- Host a human-readable dashboard at `/`.
+- Host a human-readable dashboard at `/dashboard`.
 - The returned document SHOULD depict the current state of the system (for example active sessions,
   retry delays, token consumption, runtime totals, recent events, and health/error indicators).
 - It is up to the implementation whether this is server-generated HTML or a client-side app that
